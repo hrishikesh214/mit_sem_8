@@ -6,27 +6,58 @@
 #include <unistd.h>
 #include <string.h>
 #include <pthread.h>
+#include <stdlib.h>
+
+struct thread_data
+{
+    int client_sockfd;
+    int *cids;
+};
 
 void *server_thread(void *arg)
 {
     int client_sockfd;
-    char instr[80], name[80];
+    char readBuffer[80], writeBuffer[80];
     int count = 0;
-    client_sockfd = (int)arg;
-    count = read(client_sockfd, instr, 20);
-    instr[count] = '\0';
-    printf("input from client %s\n", instr);
-    strcpy(name, "Thank you");
-    strcat(name, instr);
-    strcpy(instr, name);
-    write(client_sockfd, instr, strlen(instr) + 1);
+
+    struct thread_data *my_data = (struct thread_data *)arg;
+    client_sockfd = my_data->client_sockfd;
+
+    while (1)
+    {
+        count = read(client_sockfd, readBuffer, 20);
+        readBuffer[count] = '\0';
+
+        if (strcmp(readBuffer, "exit") == 0)
+        {
+            printf("\n[server] client %d disconnected", client_sockfd);
+            break;
+        }
+
+        printf("\n[client %d] %s\n", client_sockfd, readBuffer);
+
+        sprintf(writeBuffer, "[client %d] %s", client_sockfd, readBuffer);
+
+        // broadcast to all clients
+        for (int i = 0; i < 10; i++)
+        {
+            if (my_data->cids[i] != 0)
+            {
+                write(my_data->cids[i], writeBuffer, strlen(writeBuffer) + 1);
+            }
+        }
+
+        write(client_sockfd, writeBuffer, strlen(writeBuffer) + 1);
+    }
+
+    printf("\n[server] client %d disconnected", client_sockfd);
     close(client_sockfd);
     pthread_exit(NULL);
 }
 
 int main()
 {
-    int server_sockfd, client_sockfd;
+    int server_sockfd, client_sockfd, cids[10] = {0}, cidsp = 0;
     int server_len, client_len;
     struct sockaddr_in server_address;
     struct sockaddr_in client_address;
@@ -38,17 +69,23 @@ int main()
     server_len = sizeof(server_address);
     if (bind(server_sockfd, (struct sockaddr *)&server_address, server_len) == -1)
     {
-        printf("server error");
+        printf("\n[server] error");
         exit(1);
     }
-    printf("server waiting....\n");
+    printf("\n[server] waiting....");
     listen(server_sockfd, 5);
     while (1)
     {
+        struct thread_data *my_data = (struct thread_data *)malloc(sizeof(struct thread_data));
+        my_data->client_sockfd = client_sockfd;
+        my_data->cids = cids;
+
         client_len = sizeof(client_address);
         client_sockfd = accept(server_sockfd, (struct sockaddr *)&client_address, &client_len);
-        printf("created new client thread  %d", client_sockfd);
-        pthread_create(&t, NULL, server_thread, (void *)client_sockfd);
+        printf("\n[server] created new client thread  %d", client_sockfd);
+        pthread_create(&t, NULL, server_thread, (void *)my_data);
+
+        cids[cidsp++] = client_sockfd;
     }
     return 0;
 }

@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 
 int main()
 {
@@ -12,7 +13,7 @@ int main()
     int len;
     struct sockaddr_in address;
     int result, count;
-    char str[80], instr[80];
+    char readBuffer[80], writeBuffer[80], exitTemp[] = "exit\n";
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -21,16 +22,26 @@ int main()
     result = connect(sockfd, (struct sockaddr *)&address, len);
     if (result == -1)
     {
-        printf("error\n");
+        printf("[me] error\n");
         exit(1);
     }
-    fflush(stdout);
-    printf("\nenter string :");
-    fgets(instr, 80, stdin);
-    write(sockfd, instr, strlen(instr) + 1);
-    count = read(sockfd, str, 20);
-    printf("received data from server\n");
-    printf("%s\n", str);
+    printf("[me] connected to server");
+
+    while (1)
+    {
+        fflush(stdout);
+        printf("\nenter string: ");
+        fgets(writeBuffer, 80, stdin);
+
+        write(sockfd, writeBuffer, strlen(writeBuffer) + 1);
+
+        if (strcmp(writeBuffer, exitTemp) == 0)
+            break;
+        count = read(sockfd, readBuffer, 20);
+        printf("\n[server] ");
+        printf("%s", readBuffer);
+    }
+
     close(sockfd);
     exit(0);
 }
