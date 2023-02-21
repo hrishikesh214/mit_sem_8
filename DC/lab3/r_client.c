@@ -35,11 +35,8 @@ int main(int argc, char **argv)
     /* THE CLIENT CALLS A REMOTE PROCEDURE */
 
     if ((outp = squareproc_1(&in, cl)) == NULL)
-    {
-        printf("error in calling remote procedure squareproc_1 \n");
         exit(0);
-    
-    }
+
     /*The result is returned back */
     printf("result : %ld\n", outp->res1);
     exit(0);
