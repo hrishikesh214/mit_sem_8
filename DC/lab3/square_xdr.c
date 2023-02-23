@@ -12,8 +12,6 @@ xdr_square_in (XDR *xdrs, square_in *objp)
 
 	 if (!xdr_long (xdrs, &objp->arg1))
 		 return FALSE;
-	 if (!xdr_long (xdrs, &objp->arg2))
-		 return FALSE;
 	return TRUE;
 }
 

@@ -16,7 +16,6 @@ extern "C" {
 
 struct square_in {
 	long arg1;
-	long arg2;
 };
 typedef struct square_in square_in;
 

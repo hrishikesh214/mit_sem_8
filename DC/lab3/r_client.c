@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     CLIENT *cl;       // RPC RUNTIME HANDLE
     square_in in;     // STRUCTURE FOR INPUT
     square_out *outp; //
-    if (argc != 4)    // 4 ARGUMENTS IS A NECESSITY
+    if (argc != 3)    // 4 ARGUMENTS IS A NECESSITY
         exit(0);
 
     /* this clnt_create allocates one of these structures and returns its pointers to us and we then pass this pointer to RPC runtime each time we call a remote procedure*/
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     /*argv[1] is IP address*/
 
     in.arg1 = atol(argv[2]);
-    in.arg2 = atol(argv[3]);
+    // in.arg2 = atol(argv[3]);
 
     /*conversion from uppercase to lowercase done and _1 is appended*/
 
