@@ -1,3 +1,11 @@
+/**
+ * @file lab1/server.c
+ * @author Hrishikesh Vaze (PB09)
+ * @brief Server implementation for socket programming
+ * @date 2023-02-07
+ *
+ */
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <stdio.h>
@@ -6,6 +14,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <pthread.h>
+
 void *server_thread(void *arg)
 {
     int client_sockfd;

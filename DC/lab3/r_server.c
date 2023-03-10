@@ -1,3 +1,10 @@
+/**
+ * @file lab3/r_server.c
+ * @author Hrishikesh Vaze (PB09)
+ * @date 2023-01-31
+ * @brief Server implementation for RPC
+ */
+
 #include <sys/types.h>
 #include <sys/time.h>
 #include <time.h>

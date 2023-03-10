@@ -1,3 +1,10 @@
+/**
+ * @file lab3/square.x
+ * @author Hrishikesh Vaze (PB09)
+ * @date 2023-01-31
+ * @brief RPC file for square client
+ */
+
 /* This is the RPC specification file,with a .x extension */
 /* The procedures declared in this file are visible/accesible to the client*/
 

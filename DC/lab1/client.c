@@ -1,3 +1,11 @@
+/**
+ * @file lab1/client.c
+ * @author Hrishikesh Vaze (PB09)
+ * @brief Client implementation for socket programming
+ * @date 2023-02-07
+ *
+ */
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -5,6 +13,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+
 int main()
 {
     int sockfd;
