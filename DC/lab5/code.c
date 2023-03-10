@@ -1,5 +1,5 @@
 /**
- * @file lab1.c
+ * @file lab2.c
  * @author Hrishikesh Vaze ()
  * @brief bully algorithm implementation
  * @date 2023-01-25
